@@ -1,0 +1,97 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  email       String  @unique
+  image       String
+  phoneNumber String  @unique
+  password    String
+  branch      String
+  year        String
+  rollNo      String
+  isVerified  Boolean @default(false)
+  hasEntered  Boolean @default(false)
+
+  Otp Otp?
+
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  UsersAndEvents UsersAndEvents[]
+}
+
+model Heads {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  email       String @unique
+  phoneNumber String @unique
+  image       String
+  password    String
+
+  HeadsAndEvents HeadsAndEvents[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Events {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  category    String
+  description String
+  location    String
+  roomNo      Int?
+  image       String
+  time        String
+  date        String?
+  rules       String[]
+
+  UsersAndEvents UsersAndEvents[]
+  HeadsAndEvents HeadsAndEvents[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model UsersAndEvents {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  userId String @db.ObjectId
+  user   Users  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  eventId String @db.ObjectId
+  event   Events @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, userId])
+}
+
+model HeadsAndEvents {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  headId String @unique @db.ObjectId
+  head   Heads  @relation(fields: [headId], references: [id], onDelete: Cascade)
+
+  eventId String @db.ObjectId
+  event   Events @relation(fields: [eventId], references: [id], onDelete: Cascade)
+}
+
+model Otp {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  otp       Int
+  userEmail String @unique
+
+  user Users @relation(fields: [userEmail], references: [email], onDelete: Cascade)
+}
