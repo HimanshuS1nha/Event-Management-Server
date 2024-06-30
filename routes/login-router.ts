@@ -3,7 +3,7 @@ import { ZodError } from "zod";
 import jwt from "jsonwebtoken";
 import { compare } from "bcrypt";
 
-import { loginValidator } from "../validators/user/login-validator";
+import { loginValidator } from "../validators/login-validator";
 import prisma from "../libs/db";
 import { generateOtp } from "../libs/generate-otp";
 import sendEmail from "../libs/send-email";
@@ -74,6 +74,50 @@ loginRouter.post("/user", async (req, res) => {
       message: "Logged in successfully",
       user: restUser,
       verified: user.isVerified,
+      token,
+    });
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return res.status(422).json({ error: error.errors[0].message });
+    } else {
+      return res
+        .status(500)
+        .json({ error: "Some error occured. Please try again later!" });
+    }
+  }
+});
+
+loginRouter.post("/head", async (req, res) => {
+  try {
+    const { email, password } = await loginValidator.parseAsync(req.body);
+
+    const head = await prisma.heads.findUnique({
+      where: {
+        email,
+      },
+      select: {
+        name: true,
+        password: true,
+        email: true,
+        image: true,
+        phoneNumber: true,
+      },
+    });
+    if (!head) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    const doesPasswordMatch = await compare(password, head.password);
+    if (!doesPasswordMatch) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    const { password: _, ...restHead } = head;
+    const token = jwt.sign(head.email, process.env.JWT_SECRET!);
+
+    return res.status(200).json({
+      message: "Logged in successfully",
+      head: restHead,
       token,
     });
   } catch (error) {
