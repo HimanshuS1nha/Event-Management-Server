@@ -2,15 +2,15 @@ import express from "express";
 import cors from "cors";
 
 import { loginRouter } from "./routes/login-router";
-import { signupRouter } from "./routes/signup-router";
-import { verifyRouter } from "./routes/verify-router";
-import { addHeadRouter } from "./routes/add-head-router";
-import { addEventRouter } from "./routes/add-event-router";
+import { signupRouter } from "./routes/user/signup-router";
+import { verifyRouter } from "./routes/user/verify-router";
+import { addHeadRouter } from "./routes/admin/add-head-router";
+import { addEventRouter } from "./routes/admin/add-event-router";
 import { getEventsRouter } from "./routes/get-events-router";
-import { registerForEventRouter } from "./routes/register-for-event-router";
-import { getMyEventsRouter } from "./routes/get-my-events-router";
+import { registerForEventRouter } from "./routes/user/register-for-event-router";
+import { getMyEventsRouter } from "./routes/user/get-my-events-router";
 import { getHeadDetailsRouter } from "./routes/get-head-details-router";
-import { isUserAlreadyRegisteredRouter } from "./routes/is-user-already-registered-router";
+import { isUserAlreadyRegisteredRouter } from "./routes/user/is-user-already-registered-router";
 
 const app = express();
 const port = process.env.PORT || 3000;

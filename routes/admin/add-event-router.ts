@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { ZodError } from "zod";
-import { addEventValidator } from "../validators/admin/add-event-validator";
-import prisma from "../libs/db";
+import { addEventValidator } from "../../validators/admin/add-event-validator";
+import prisma from "../../libs/db";
 
 const addEventRouter = Router();
 
