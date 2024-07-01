@@ -2,8 +2,8 @@ import { Router } from "express";
 import { ZodError } from "zod";
 import jwt from "jsonwebtoken";
 
-import { registerValidator } from "../validators/user/register-for-event-validator";
-import prisma from "../libs/db";
+import { registerValidator } from "../../validators/user/register-for-event-validator";
+import prisma from "../../libs/db";
 
 const registerForEventRouter = Router();
 

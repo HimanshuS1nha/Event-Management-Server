@@ -2,10 +2,10 @@ import { Router } from "express";
 import { ZodError } from "zod";
 import { hash } from "bcrypt";
 
-import { signupValidator } from "../validators/user/signup-validator";
-import prisma from "../libs/db";
-import { generateOtp } from "../libs/generate-otp";
-import sendEmail from "../libs/send-email";
+import { signupValidator } from "../../validators/user/signup-validator";
+import prisma from "../../libs/db";
+import { generateOtp } from "../../libs/generate-otp";
+import sendEmail from "../../libs/send-email";
 
 const signupRouter = Router();
 

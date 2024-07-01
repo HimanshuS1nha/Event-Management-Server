@@ -1,7 +1,7 @@
 import { Router } from "express";
 import jwt from "jsonwebtoken";
 
-import prisma from "../libs/db";
+import prisma from "../../libs/db";
 
 const getMyEventsRouter = Router();
 

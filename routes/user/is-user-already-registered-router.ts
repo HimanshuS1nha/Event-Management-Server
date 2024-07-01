@@ -2,8 +2,8 @@ import { Router } from "express";
 import jwt from "jsonwebtoken";
 import { ZodError } from "zod";
 
-import { registerValidator } from "../validators/user/register-for-event-validator";
-import prisma from "../libs/db";
+import { registerValidator } from "../../validators/user/register-for-event-validator";
+import prisma from "../../libs/db";
 
 const isUserAlreadyRegisteredRouter = Router();
 

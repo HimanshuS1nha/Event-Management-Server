@@ -2,8 +2,8 @@ import { Router } from "express";
 import { ZodError } from "zod";
 import { hash } from "bcrypt";
 
-import { addHeadValidator } from "../validators/admin/add-head-validator";
-import prisma from "../libs/db";
+import { addHeadValidator } from "../../validators/admin/add-head-validator";
+import prisma from "../../libs/db";
 
 const addHeadRouter = Router();
 

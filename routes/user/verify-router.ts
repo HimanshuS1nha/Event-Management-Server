@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { verifyValidator } from "../validators/user/verify-validator";
-import prisma from "../libs/db";
+import { verifyValidator } from "../../validators/user/verify-validator";
+import prisma from "../../libs/db";
 import { ZodError } from "zod";
 
 const verifyRouter = Router();
