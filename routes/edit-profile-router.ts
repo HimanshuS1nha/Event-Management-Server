@@ -2,12 +2,12 @@ import { Router } from "express";
 import { ZodError } from "zod";
 import jwt from "jsonwebtoken";
 
-import { editProfileValidator } from "../../validators/head/edit-profile-validator";
-import prisma from "../../libs/db";
+import { editProfileValidator } from "../validators/head/edit-profile-validator";
+import prisma from "../libs/db";
 
 const editProfileRouter = Router();
 
-editProfileRouter.post("/", async (req, res) => {
+editProfileRouter.post("/head", async (req, res) => {
   try {
     const { image, name, phoneNumber, token } =
       await editProfileValidator.parseAsync(req.body);
