@@ -49,7 +49,11 @@ getMyEventRouter.post("/", async (req, res) => {
     }
 
     return res.status(200).json({ myEvent });
-  } catch (error) {}
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "Some error occured. Please try again later!" });
+  }
 });
 
 export { getMyEventRouter };

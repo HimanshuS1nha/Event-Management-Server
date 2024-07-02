@@ -12,6 +12,7 @@ import { getMyEventsRouter } from "./routes/user/get-my-events-router";
 import { getHeadDetailsRouter } from "./routes/get-head-details-router";
 import { isUserAlreadyRegisteredRouter } from "./routes/user/is-user-already-registered-router";
 import { getMyEventRouter } from "./routes/head/get-my-event-router";
+import { getRegisteredStudentsRouter } from "./routes/head/get-registered-students-router";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -29,6 +30,7 @@ app.use("/api/is-user-already-registered", isUserAlreadyRegisteredRouter);
 app.use("/api/get-my-events", getMyEventsRouter);
 app.use("/api/get-head-details", getHeadDetailsRouter);
 app.use("/api/get-my-event", getMyEventRouter);
+app.use("/api/get-registered-students", getRegisteredStudentsRouter);
 
 app.get("/", (_, res) => {
   return res.send("Hello");
