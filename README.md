@@ -1,6 +1,6 @@
 # Event Management Server
 
-This is the server part of the full stack event management solution.
+This is the server part of the full stack event management app.
 
 ## TECH STACK USED
 
@@ -8,6 +8,10 @@ This is the server part of the full stack event management solution.
 - MongoDB
 - Prisma
 - Nodemailer
+
+## OTHER LINKS
+
+- [Head App](https://github.com/HimanshuS1nha/Event-Management-Heads-App)
 
 ## 🚀 About Me
 
