@@ -131,4 +131,38 @@ loginRouter.post("/head", async (req, res) => {
   }
 });
 
+loginRouter.post("/scanner", async (req, res) => {
+  try {
+    const { email, password } = await loginValidator.parseAsync(req.body);
+
+    const scanner = await prisma.scanner.findUnique({
+      where: {
+        email,
+      },
+    });
+    if (!scanner) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    const doesPasswordMatch = await compare(password, scanner.password);
+    if (!doesPasswordMatch) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+    const token = jwt.sign(scanner.email, process.env.JWT_SECRET!);
+
+    return res.status(200).json({
+      message: "Logged in successfully",
+      token,
+    });
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return res.status(422).json({ error: error.errors[0].message });
+    } else {
+      return res
+        .status(500)
+        .json({ error: "Some error occured. Please try again later!" });
+    }
+  }
+});
+
 export { loginRouter };
