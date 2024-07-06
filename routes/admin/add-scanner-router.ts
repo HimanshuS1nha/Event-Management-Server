@@ -16,7 +16,7 @@ addScannerRouter.post("/", async (req, res) => {
         email,
       },
     });
-    if (!scanner) {
+    if (scanner) {
       return res.status(401).json({ error: "User already exists" });
     }
 
