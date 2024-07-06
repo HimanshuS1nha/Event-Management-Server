@@ -16,6 +16,7 @@ import { getRegisteredStudentsRouter } from "./routes/head/get-registered-studen
 import { editProfileRouter } from "./routes/edit-profile-router";
 import { editEventDetailsRouter } from "./routes/head/edit-event-details-router";
 import { changePasswordRouter } from "./routes/change-password-router";
+import { addScannerRouter } from "./routes/admin/add-scanner-router";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -28,6 +29,7 @@ app.use("/api/verify", verifyRouter);
 app.use("/api/get-events", getEventsRouter);
 app.use("/api/add-head", addHeadRouter);
 app.use("/api/add-event", addEventRouter);
+app.use("/api/add-scanner", addScannerRouter);
 app.use("/api/register-for-event", registerForEventRouter);
 app.use("/api/is-user-already-registered", isUserAlreadyRegisteredRouter);
 app.use("/api/get-my-events", getMyEventsRouter);
