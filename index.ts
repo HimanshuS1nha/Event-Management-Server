@@ -17,6 +17,7 @@ import { editProfileRouter } from "./routes/edit-profile-router";
 import { editEventDetailsRouter } from "./routes/head/edit-event-details-router";
 import { changePasswordRouter } from "./routes/change-password-router";
 import { addScannerRouter } from "./routes/admin/add-scanner-router";
+import { userEntryRouter } from "./routes/scanner/user-entry-router";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -39,6 +40,7 @@ app.use("/api/get-registered-students", getRegisteredStudentsRouter);
 app.use("/api/edit-profile", editProfileRouter);
 app.use("/api/edit-event-details", editEventDetailsRouter);
 app.use("/api/change-password", changePasswordRouter);
+app.use("/api/user-entry", userEntryRouter);
 
 app.get("/", (_, res) => {
   return res.send("Hello");
