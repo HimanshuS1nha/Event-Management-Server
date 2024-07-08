@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { ZodError } from "zod";
 import { hash } from "bcrypt";
+import jwt from "jsonwebtoken";
 
 import { addHeadValidator } from "../../validators/admin/add-head-validator";
 import prisma from "../../libs/db";
@@ -9,8 +10,20 @@ const addHeadRouter = Router();
 
 addHeadRouter.post("/", async (req, res) => {
   try {
-    const { confirmPassword, email, image, name, password, phoneNumber } =
-      await addHeadValidator.parseAsync(req.body);
+    const {
+      confirmPassword,
+      email,
+      image,
+      name,
+      password,
+      phoneNumber,
+      token,
+    } = await addHeadValidator.parseAsync(req.body);
+
+    const adminEmail = jwt.verify(token, process.env.JWT_SECRET!) as string;
+    if (!adminEmail || adminEmail !== process.env.ADMIN_EMAIL) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
 
     if (password !== confirmPassword) {
       return res.status(403).json({ error: "Passwords do not match" });

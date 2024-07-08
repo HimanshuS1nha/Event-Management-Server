@@ -24,4 +24,8 @@ export const addHeadValidator = z.object({
     .string({ required_error: "Confirm Password is required" })
     .trim()
     .min(8, { message: "Confirm Password must be atleast 8 characters long" }),
+  token: z
+    .string({ required_error: "Unauthorized" })
+    .trim()
+    .min(1, { message: "Unauthorized" }),
 });
