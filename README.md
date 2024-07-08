@@ -12,6 +12,7 @@ This is the server part of the full stack event management app.
 ## OTHER LINKS
 
 - [Head App](https://github.com/HimanshuS1nha/Event-Management-Heads-App)
+- [Scanner App](https://github.com/HimanshuS1nha/Event-Management-Scanner-App)
 
 ## 🚀 About Me
 
