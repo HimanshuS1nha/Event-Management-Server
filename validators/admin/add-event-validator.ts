@@ -29,4 +29,8 @@ export const addEventValidator = z.object({
   date: z.string().optional(),
   rules: z.array(z.string()).optional(),
   heads: z.array(z.string()),
+  token: z
+    .string({ required_error: "Unauthorized" })
+    .trim()
+    .min(1, { message: "Unauthorized" }),
 });

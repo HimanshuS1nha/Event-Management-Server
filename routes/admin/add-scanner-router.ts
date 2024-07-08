@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { hash } from "bcrypt";
 import { ZodError } from "zod";
+import jwt from "jsonwebtoken";
 
 import prisma from "../../libs/db";
 import { addScannerValidator } from "../../validators/admin/add-scanner-validator";
@@ -9,7 +10,14 @@ const addScannerRouter = Router();
 
 addScannerRouter.post("/", async (req, res) => {
   try {
-    const { email, password } = await addScannerValidator.parseAsync(req.body);
+    const { email, password, token } = await addScannerValidator.parseAsync(
+      req.body
+    );
+
+    const adminEmail = jwt.verify(token, process.env.JWT_SECRET!) as string;
+    if (!adminEmail || adminEmail !== process.env.ADMIN_EMAIL) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
 
     const scanner = await prisma.scanner.findUnique({
       where: {

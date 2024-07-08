@@ -1,5 +1,7 @@
 import { Router } from "express";
 import { ZodError } from "zod";
+import jwt from "jsonwebtoken";
+
 import { addEventValidator } from "../../validators/admin/add-event-validator";
 import prisma from "../../libs/db";
 
@@ -18,7 +20,13 @@ addEventRouter.post("/", async (req, res) => {
       roomNo,
       rules,
       time,
+      token,
     } = await addEventValidator.parseAsync(req.body);
+
+    const email = jwt.verify(token, process.env.JWT_SECRET!) as string;
+    if (!email || email !== process.env.ADMIN_EMAIL) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
 
     if (heads.length === 0) {
       return res
