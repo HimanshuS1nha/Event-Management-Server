@@ -8,6 +8,7 @@ This is the server part of the full stack event management app.
 - MongoDB
 - Prisma
 - Nodemailer
+- Zod
 
 ## OTHER LINKS
 
