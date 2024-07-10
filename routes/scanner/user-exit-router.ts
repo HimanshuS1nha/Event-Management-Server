@@ -44,7 +44,9 @@ userExitRouter.post("/", async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
     if (!user.hasEntered) {
-      return res.status(409).json({ error: "User has not entered yet", user });
+      return res
+        .status(200)
+        .json({ error: "User has not entered yet", user, isSuccess: false });
     }
 
     await prisma.users.update({
@@ -56,7 +58,9 @@ userExitRouter.post("/", async (req, res) => {
       },
     });
 
-    return res.status(201).json({ error: "Exit successful", user });
+    return res
+      .status(201)
+      .json({ error: "Exit successful", user, isSuccess: true });
   } catch (error) {
     if (error instanceof ZodError) {
       return res.status(422).json({ error: error.errors[0].message });
