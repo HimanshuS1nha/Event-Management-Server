@@ -24,10 +24,19 @@ addEventRouter.post("/", async (req, res) => {
     } = await addEventValidator.parseAsync(req.body);
 
     const email = jwt.verify(token, process.env.JWT_SECRET!) as string;
-    if (!email || email !== process.env.ADMIN_EMAIL) {
+    if (!email) {
       return res.status(401).json({ error: "Unauthorized" });
     }
 
+    const admin = await prisma.admin.findUnique({
+      where: {
+        email,
+      },
+    });
+    if (!admin) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+    
     if (heads.length === 0) {
       return res
         .status(422)

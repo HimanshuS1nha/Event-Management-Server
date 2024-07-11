@@ -15,7 +15,16 @@ addScannerRouter.post("/", async (req, res) => {
     );
 
     const adminEmail = jwt.verify(token, process.env.JWT_SECRET!) as string;
-    if (!adminEmail || adminEmail !== process.env.ADMIN_EMAIL) {
+    if (!adminEmail) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    const admin = await prisma.admin.findUnique({
+      where: {
+        email: adminEmail,
+      },
+    });
+    if (!admin) {
       return res.status(401).json({ error: "Unauthorized" });
     }
 
