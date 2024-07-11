@@ -165,4 +165,53 @@ loginRouter.post("/scanner", async (req, res) => {
   }
 });
 
+loginRouter.post("/admin", async (req, res) => {
+  try {
+    const { email, password } = await loginValidator.parseAsync(req.body);
+
+    const admin = await prisma.admin.findUnique({
+      where: {
+        email,
+      },
+    });
+    if (!admin) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    const doesPasswordMatch = await compare(password, admin.password);
+    if (!doesPasswordMatch) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    const otp = await generateOtp();
+    await prisma.admin.update({
+      where: {
+        id: admin.id,
+      },
+      data: {
+        otp,
+      },
+    });
+
+    const isEmailSent = await sendEmail(admin.email, otp);
+    if (!isEmailSent) {
+      return res
+        .status(500)
+        .json({ error: "Some error occured. Please try again later!" });
+    }
+
+    return res.status(200).json({
+      message: "Otp sent successfully",
+    });
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return res.status(422).json({ error: error.errors[0].message });
+    } else {
+      return res
+        .status(500)
+        .json({ error: "Some error occured. Please try again later!" });
+    }
+  }
+});
+
 export { loginRouter };
