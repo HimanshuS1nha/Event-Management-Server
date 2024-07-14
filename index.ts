@@ -3,7 +3,7 @@ import cors from "cors";
 
 import { loginRouter } from "./routes/login-router";
 import { signupRouter } from "./routes/user/signup-router";
-import { verifyRouter } from "./routes/user/verify-router";
+import { verifyRouter } from "./routes/verify-router";
 import { addHeadRouter } from "./routes/admin/add-head-router";
 import { addEventRouter } from "./routes/admin/add-event-router";
 import { getEventsRouter } from "./routes/get-events-router";

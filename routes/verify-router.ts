@@ -1,7 +1,9 @@
 import { Router } from "express";
-import { verifyValidator } from "../../validators/user/verify-validator";
-import prisma from "../../libs/db";
 import { ZodError } from "zod";
+import jwt from "jsonwebtoken";
+
+import { verifyValidator } from "../validators/verify-validator";
+import prisma from "../libs/db";
 
 const verifyRouter = Router();
 
@@ -48,6 +50,38 @@ verifyRouter.post("/user", async (req, res) => {
     }
 
     return res.status(200).json({ message: "Verified successfully" });
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return res.status(422).json({ error: error.errors[0].message });
+    } else {
+      return res
+        .status(500)
+        .json({ error: "Some error occured. Please try again later!" });
+    }
+  }
+});
+
+verifyRouter.post("/admin", async (req, res) => {
+  try {
+    const { email, otp } = await verifyValidator.parseAsync(req.body);
+
+    const admin = await prisma.admin.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    if (!admin) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    if (parseInt(otp) !== admin.otp) {
+      return res.status(422).json({ error: "Wrong OTP" });
+    }
+
+    const token = jwt.sign(admin.email, process.env.JWT_SECRET!);
+
+    return res.status(200).json({ message: "Verified successfully", token });
   } catch (error) {
     if (error instanceof ZodError) {
       return res.status(422).json({ error: error.errors[0].message });
