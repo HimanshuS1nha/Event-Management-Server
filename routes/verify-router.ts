@@ -79,6 +79,15 @@ verifyRouter.post("/admin", async (req, res) => {
       return res.status(422).json({ error: "Wrong OTP" });
     }
 
+    await prisma.admin.update({
+      where: {
+        id: admin.id,
+      },
+      data: {
+        otp: null,
+      },
+    });
+
     const token = jwt.sign(admin.email, process.env.JWT_SECRET!);
 
     return res.status(200).json({ message: "Verified successfully", token });
