@@ -20,6 +20,7 @@ import { addScannerRouter } from "./routes/admin/add-scanner-router";
 import { userEntryRouter } from "./routes/scanner/user-entry-router";
 import { userExitRouter } from "./routes/scanner/user-exit-router";
 import { getAllHeadsRouter } from "./routes/admin/get-all-heads";
+import { deleteHeadRouter } from "./routes/admin/delete-head-router";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -45,6 +46,7 @@ app.use("/api/change-password", changePasswordRouter);
 app.use("/api/user-entry", userEntryRouter);
 app.use("/api/user-exit", userExitRouter);
 app.use("/api/get-all-heads", getAllHeadsRouter);
+app.use("/api/delete-head", deleteHeadRouter);
 
 app.get("/", (_, res) => {
   return res.send("Hello");
