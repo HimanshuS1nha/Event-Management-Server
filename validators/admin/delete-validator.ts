@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const deleteHeadValidator = z.object({
+export const deleteValidator = z.object({
   id: z
     .string({ required_error: "ID is required" })
     .trim()
