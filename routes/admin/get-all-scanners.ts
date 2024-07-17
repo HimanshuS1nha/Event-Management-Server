@@ -26,7 +26,12 @@ getAllScannersRouter.post("/", async (req, res) => {
       return res.status(401).json({ error: "Unauthorized" });
     }
 
-    const allScanners = await prisma.scanner.findMany();
+    const allScanners = await prisma.scanner.findMany({
+      select: {
+        email: true,
+        id: true,
+      },
+    });
 
     return res.status(200).json({ allScanners });
   } catch (error) {
