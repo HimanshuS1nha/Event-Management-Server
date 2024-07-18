@@ -1,16 +1,15 @@
 import { Router } from "express";
-import { hash } from "bcrypt";
 import { ZodError } from "zod";
 import jwt from "jsonwebtoken";
 
 import prisma from "../../libs/db";
-import { addScannerValidator } from "../../validators/admin/add-scanner-validator";
+import { editScannerValidator } from "../../validators/admin/edit-scanner-validator";
 
-const addScannerRouter = Router();
+const editScannerRouter = Router();
 
-addScannerRouter.post("/", async (req, res) => {
+editScannerRouter.post("/", async (req, res) => {
   try {
-    const { email, password, token } = await addScannerValidator.parseAsync(
+    const { token, newEmail, oldEmail } = await editScannerValidator.parseAsync(
       req.body
     );
 
@@ -30,25 +29,23 @@ addScannerRouter.post("/", async (req, res) => {
 
     const scanner = await prisma.scanner.findUnique({
       where: {
-        email,
+        email: oldEmail,
       },
     });
-    if (scanner) {
-      return res.status(401).json({ error: "Email already exists" });
+    if (!scanner) {
+      return res.status(404).json({ error: "Scanner not found" });
     }
 
-    const hashedPassword = await hash(password, 10);
-
-    await prisma.scanner.create({
+    await prisma.scanner.update({
+      where: {
+        id: scanner.id,
+      },
       data: {
-        email,
-        password: hashedPassword,
+        email: newEmail,
       },
     });
 
-    return res.status(200).json({
-      message: "Scanner added successfully",
-    });
+    return res.status(201).json({ message: "Scanner edited successfully" });
   } catch (error) {
     if (error instanceof ZodError) {
       return res.status(422).json({ error: error.errors[0].message });
@@ -60,4 +57,4 @@ addScannerRouter.post("/", async (req, res) => {
   }
 });
 
-export { addScannerRouter };
+export { editScannerRouter };
