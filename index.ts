@@ -22,6 +22,7 @@ import { userExitRouter } from "./routes/scanner/user-exit-router";
 import { getAllHeadsRouter } from "./routes/admin/get-all-heads";
 import { deleteRouter } from "./routes/admin/delete-router";
 import { getAllScannersRouter } from "./routes/admin/get-all-scanners";
+import { editHeadRouter } from "./routes/admin/edit-head-router";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -49,6 +50,7 @@ app.use("/api/user-exit", userExitRouter);
 app.use("/api/get-all-heads", getAllHeadsRouter);
 app.use("/api/get-all-scanners", getAllScannersRouter);
 app.use("/api/delete", deleteRouter);
+app.use("/api/edit-head", editHeadRouter);
 
 app.get("/", (_, res) => {
   return res.send("Hello");
