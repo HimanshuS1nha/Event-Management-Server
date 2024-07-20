@@ -19,9 +19,9 @@ import { changePasswordRouter } from "./routes/change-password-router";
 import { addScannerRouter } from "./routes/admin/add-scanner-router";
 import { userEntryRouter } from "./routes/scanner/user-entry-router";
 import { userExitRouter } from "./routes/scanner/user-exit-router";
-import { getAllHeadsRouter } from "./routes/admin/get-all-heads";
+import { getAllHeadsRouter } from "./routes/admin/get-all-heads-router";
 import { deleteRouter } from "./routes/admin/delete-router";
-import { getAllScannersRouter } from "./routes/admin/get-all-scanners";
+import { getAllScannersRouter } from "./routes/admin/get-all-scanners-router";
 import { editHeadRouter } from "./routes/admin/edit-head-router";
 
 const app = express();

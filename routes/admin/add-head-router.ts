@@ -38,6 +38,24 @@ addHeadRouter.post("/", async (req, res) => {
       return res.status(403).json({ error: "Passwords do not match" });
     }
 
+    const head = await prisma.heads.findMany({
+      where: {
+        OR: [
+          {
+            email,
+          },
+          {
+            phoneNumber,
+          },
+        ],
+      },
+    });
+    if (head.length !== 0) {
+      return res
+        .status(409)
+        .json({ error: "Email or phone number already exists" });
+    }
+
     const hashedPassword = await hash(password, 10);
 
     await prisma.heads.create({
@@ -52,6 +70,7 @@ addHeadRouter.post("/", async (req, res) => {
 
     return res.status(201).json({ message: "Head added successfully" });
   } catch (error) {
+    console.log(error);
     if (error instanceof ZodError) {
       res.status(422).json({ error: error.errors[0].message });
     } else {

@@ -45,23 +45,34 @@ getAllHeadsRouter.post("/", async (req, res) => {
     }[] = [];
 
     for await (const head of heads) {
-      const event = await prisma.events.findUnique({
-        where: {
-          id: head.HeadsAndEvents[0].eventId,
-        },
-      });
+      if (head.HeadsAndEvents.length !== 0) {
+        const event = await prisma.events.findUnique({
+          where: {
+            id: head.HeadsAndEvents[0].eventId,
+          },
+        });
 
-      allHeads.push({
-        eventName: event!.name,
-        id: head.id,
-        image: head.image,
-        name: head.name,
-        phoneNumber: head.phoneNumber,
-      });
+        allHeads.push({
+          eventName: event!.name,
+          id: head.id,
+          image: head.image,
+          name: head.name,
+          phoneNumber: head.phoneNumber,
+        });
+      } else {
+        allHeads.push({
+          eventName: "No Event",
+          id: head.id,
+          image: head.image,
+          name: head.name,
+          phoneNumber: head.phoneNumber,
+        });
+      }
     }
 
     return res.status(200).json({ allHeads });
   } catch (error) {
+    console.log(error);
     return res
       .status(500)
       .json({ error: "Some error occured. Please try again later!" });
