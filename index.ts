@@ -23,6 +23,7 @@ import { getAllHeadsRouter } from "./routes/admin/get-all-heads-router";
 import { deleteRouter } from "./routes/admin/delete-router";
 import { getAllScannersRouter } from "./routes/admin/get-all-scanners-router";
 import { editHeadRouter } from "./routes/admin/edit-head-router";
+import { getUnassignedHeadsRouter } from "./routes/admin/get-unassigned-heads-router";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -51,6 +52,7 @@ app.use("/api/get-all-heads", getAllHeadsRouter);
 app.use("/api/get-all-scanners", getAllScannersRouter);
 app.use("/api/delete", deleteRouter);
 app.use("/api/edit-head", editHeadRouter);
+app.use("/api/get-unassigned-heads", getUnassignedHeadsRouter);
 
 app.get("/", (_, res) => {
   return res.send("Hello");
