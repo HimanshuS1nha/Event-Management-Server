@@ -111,7 +111,7 @@ deleteRouter.post("/scanner", async (req, res) => {
       },
     });
 
-    return res.status(201).json({ message: "Head deleted successfully" });
+    return res.status(201).json({ message: "Scanner deleted successfully" });
   } catch (error) {
     if (error instanceof ZodError) {
       return res.status(422).json({ error: error.errors[0].message });
@@ -150,7 +150,7 @@ deleteRouter.post("/event", async (req, res) => {
       },
     });
 
-    return res.status(201).json({ message: "Head deleted successfully" });
+    return res.status(201).json({ message: "Event deleted successfully" });
   } catch (error) {
     if (error instanceof ZodError) {
       return res.status(422).json({ error: error.errors[0].message });

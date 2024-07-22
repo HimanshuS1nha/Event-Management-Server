@@ -2,12 +2,15 @@ import { Router } from "express";
 import jwt from "jsonwebtoken";
 
 import prisma from "../../libs/db";
+import { getHeadsDetailsValidator } from "../../validators/admin/get-heads-details-validator";
 
-const getUnassignedHeadsRouter = Router();
+const getHeadsDetails = Router();
 
-getUnassignedHeadsRouter.post("/", async (req, res) => {
+getHeadsDetails.post("/", async (req, res) => {
   try {
-    const { token } = req.body;
+    const { token, heads } = await getHeadsDetailsValidator.parseAsync(
+      req.body
+    );
     if (!token) {
       return res.status(401).json({ error: "Unauthorized" });
     }
@@ -26,7 +29,9 @@ getUnassignedHeadsRouter.post("/", async (req, res) => {
       return res.status(401).json({ error: "Unauthorized" });
     }
 
-    const heads = await prisma.heads.findMany({
+    let allHeads: { id: string; name: string }[] = [];
+
+    const dbHeads = await prisma.heads.findMany({
       select: {
         id: true,
         name: true,
@@ -36,21 +41,16 @@ getUnassignedHeadsRouter.post("/", async (req, res) => {
       },
     });
 
-    let unassignedHeads: {
-      id: string;
-      name: string;
-    }[] = [];
-
-    for await (const head of heads) {
-      if (head.HeadsAndEvents.length === 0) {
-        unassignedHeads.push({
+    for await (const head of dbHeads) {
+      if (head.HeadsAndEvents.length === 0 || heads.includes(head.id)) {
+        allHeads.push({
           id: head.id,
           name: head.name,
         });
       }
     }
 
-    return res.status(200).json({ unassignedHeads });
+    return res.status(200).json({ allHeads });
   } catch (error) {
     return res
       .status(500)
@@ -58,4 +58,4 @@ getUnassignedHeadsRouter.post("/", async (req, res) => {
   }
 });
 
-export { getUnassignedHeadsRouter };
+export { getHeadsDetails };

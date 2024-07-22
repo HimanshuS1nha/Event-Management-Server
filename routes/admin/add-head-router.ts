@@ -70,7 +70,6 @@ addHeadRouter.post("/", async (req, res) => {
 
     return res.status(201).json({ message: "Head added successfully" });
   } catch (error) {
-    console.log(error);
     if (error instanceof ZodError) {
       res.status(422).json({ error: error.errors[0].message });
     } else {

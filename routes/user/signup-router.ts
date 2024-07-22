@@ -74,7 +74,6 @@ signupRouter.post("/user", async (req, res) => {
 
     return res.status(201).json({ message: "Account created successfully" });
   } catch (error) {
-    console.log(error);
     if (error instanceof ZodError) {
       return res.status(422).json({ error: error.errors[0].message });
     } else {
