@@ -9,9 +9,8 @@ const getUsersRouter = Router();
 
 getUsersRouter.post("/", async (req, res) => {
   try {
-    const { pageNumber, perPage, token } = await getUsersValidator.parseAsync(
-      req.body
-    );
+    const { pageNumber, perPage, token, branch, year } =
+      await getUsersValidator.parseAsync(req.body);
 
     if (!token) {
       return res.status(401).json({ error: "Unauthorized" });
@@ -31,7 +30,7 @@ getUsersRouter.post("/", async (req, res) => {
       return res.status(401).json({ error: "Unauthorized" });
     }
 
-    const users = await prisma.users.findMany({
+    let users = await prisma.users.findMany({
       skip: pageNumber * perPage,
       take: perPage,
       select: {
@@ -42,6 +41,16 @@ getUsersRouter.post("/", async (req, res) => {
         image: true,
       },
     });
+
+    if (branch && year) {
+      users = users.filter(
+        (user) => user.branch === branch && user.year === year
+      );
+    } else if (branch) {
+      users = users.filter((user) => user.branch === branch);
+    } else if (year) {
+      users = users.filter((user) => user.year === year);
+    }
 
     const totalNumberOfUsers = await prisma.users.count();
 
