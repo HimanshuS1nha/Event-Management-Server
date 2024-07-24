@@ -191,6 +191,7 @@ loginRouter.post("/admin", async (req, res) => {
       },
       data: {
         otp,
+        otpExpiresIn: new Date(Date.now() + 5 * 60 * 1000),
       },
     });
 

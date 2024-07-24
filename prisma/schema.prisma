@@ -98,19 +98,20 @@ model Scanner {
 }
 
 model Admin {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
-  email    String @unique
-  password String
-  otp      Int?
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  email        String    @unique
+  password     String
+  otp          Int?
+  otpExpiresIn DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Otp {
-  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   otp       Int
-  userEmail String @unique
+  userEmail String   @unique
   expiresIn DateTime
 
   user Users @relation(fields: [userEmail], references: [email], onDelete: Cascade)

@@ -83,6 +83,10 @@ verifyRouter.post("/admin", async (req, res) => {
       return res.status(422).json({ error: "Wrong OTP" });
     }
 
+    if (admin.otpExpiresIn! < new Date()) {
+      return res.status(410).json({ error: "OTP expired" });
+    }
+
     await prisma.admin.update({
       where: {
         id: admin.id,
