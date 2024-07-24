@@ -111,6 +111,7 @@ model Otp {
   id        String @id @default(auto()) @map("_id") @db.ObjectId
   otp       Int
   userEmail String @unique
+  expiresIn DateTime
 
   user Users @relation(fields: [userEmail], references: [email], onDelete: Cascade)
 }

@@ -52,6 +52,7 @@ loginRouter.post("/user", async (req, res) => {
         data: {
           otp,
           userEmail: user.email,
+          expiresIn: new Date(Date.now() + 5 * 60 * 1000),
         },
       });
 

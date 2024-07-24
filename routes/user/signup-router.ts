@@ -63,6 +63,7 @@ signupRouter.post("/user", async (req, res) => {
       data: {
         otp,
         userEmail: email,
+        expiresIn: new Date(Date.now() + 5 * 60 * 1000),
       },
     });
     const isEmailSent = await sendEmail(email, otp);

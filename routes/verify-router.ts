@@ -33,6 +33,10 @@ verifyRouter.post("/user", async (req, res) => {
         return res.status(422).json({ error: "Wrong OTP" });
       }
 
+      if (otpEntry.expiresIn < new Date()) {
+        return res.status(410).json({ error: "OTP expired" });
+      }
+
       await prisma.otp.delete({
         where: {
           id: otpEntry.id,
