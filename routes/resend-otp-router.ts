@@ -59,4 +59,47 @@ resendOtpRouter.post("/user", async (req, res) => {
   }
 });
 
+resendOtpRouter.post("/admin", async (req, res) => {
+  try {
+    const { email } = await resendOtpValidator.parseAsync(req.body);
+
+    const admin = await prisma.admin.findUnique({
+      where: {
+        email,
+      },
+    });
+    if (!admin) {
+      return res.status(404).json({ error: "Not found" });
+    }
+
+    const otp = await generateOtp();
+    await prisma.admin.update({
+      where: {
+        id: admin.id,
+      },
+      data: {
+        otp,
+        otpExpiresIn: new Date(Date.now() + 5 * 60 * 1000),
+      },
+    });
+
+    const isEmailSent = await sendEmail(admin.email, otp);
+    if (!isEmailSent) {
+      return res
+        .status(500)
+        .json({ error: "Some error occured. Please try again later!" });
+    }
+
+    return res.status(200).json({ message: "OTP sent successfully" });
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return res.status(422).json({ error: error.errors[0].message });
+    } else {
+      return res
+        .status(500)
+        .json({ error: "Some error occured. Please try again later!" });
+    }
+  }
+});
+
 export { resendOtpRouter };
