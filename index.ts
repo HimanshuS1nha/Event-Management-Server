@@ -27,6 +27,7 @@ import { getUnassignedHeadsRouter } from "./routes/admin/get-unassigned-heads-ro
 import { getHeadsDetails } from "./routes/admin/get-heads-details-router";
 import { editEventRouter } from "./routes/admin/edit-event-router";
 import { getUsersRouter } from "./routes/admin/get-users-router";
+import { resendOtpRouter } from "./routes/resend-otp-router";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -59,6 +60,7 @@ app.use("/api/get-unassigned-heads", getUnassignedHeadsRouter);
 app.use("/api/get-heads-details", getHeadsDetails);
 app.use("/api/edit-event", editEventRouter);
 app.use("/api/get-users", getUsersRouter);
+app.use("/api/resend-otp", resendOtpRouter);
 
 app.get("/", (_, res) => {
   return res.send("Hello");
